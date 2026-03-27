@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>妙麗歲數計算機</title>
+
+<style>
+
+body{
+background:#fff7ef;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+/* 整體容器 */
+
+.container{
+position:relative;
+width:720px;
+height:500px;
+}
+
+
+/* 思考框 */
+
+.thought{
+position:absolute;
+top:20px;
+right:30px;
+background:white;
+padding:20px;
+border-radius:30px;
+width:300px;
+box-shadow:0 5px 10px rgba(0,0,0,0.1);
+text-align:center;
+}
+
+
+/* 思考泡泡 左下 → 右上 */
+
+.bubble1{
+position:absolute;
+bottom:130px;
+left:220px;
+width:12px;
+height:12px;
+background:white;
+border-radius:50%;
+box-shadow:0 3px 6px rgba(0,0,0,0.05);
+}
+
+.bubble2{
+position:absolute;
+bottom:160px;
+left:260px;
+width:20px;
+height:20px;
+background:white;
+border-radius:50%;
+box-shadow:0 3px 6px rgba(0,0,0,0.05);
+}
+
+.bubble3{
+position:absolute;
+bottom:200px;
+left:300px;
+width:30px;
+height:30px;
+background:white;
+border-radius:50%;
+box-shadow:0 3px 6px rgba(0,0,0,0.05);
+}
+
+
+
+/* 狗狗 */
+
+.dog{
+position:absolute;
+bottom:0;
+left:0;
+width:230px;
+height:210px;
+background:#f4a261;
+border-radius:50%;
+}
+
+
+/* 白臉 */
+
+.face-white{
+width:150px;
+height:150px;
+background:white;
+border-radius:50%;
+position:absolute;
+top:50px;
+left:50%;
+transform:translateX(-50%);
+}
+
+
+/* 白額頭 */
+
+.forehead{
+width:40px;
+height:70px;
+background:white;
+position:absolute;
+top:5px;
+left:50%;
+transform:translateX(-50%);
+border-radius:20px;
+}
+
+
+/* 三角耳朵 */
+
+.ear{
+width:0;
+height:0;
+border-left:40px solid transparent;
+border-right:40px solid transparent;
+border-bottom:90px solid #f4a261;
+position:absolute;
+top:-60px;
+}
+
+.left-ear{
+left:10px;
+transform:rotate(-15deg);
+}
+
+.right-ear{
+right:10px;
+transform:rotate(15deg);
+}
+
+
+/* 眼睛 */
+
+.eye{
+width:18px;
+height:18px;
+background:black;
+border-radius:50%;
+position:absolute;
+top:90px;
+}
+
+.left-eye{
+left:65px;
+}
+
+.right-eye{
+right:65px;
+}
+
+
+/* 鼻子 */
+
+.nose{
+width:25px;
+height:18px;
+background:black;
+border-radius:50%;
+position:absolute;
+top:125px;
+left:50%;
+transform:translateX(-50%);
+}
+
+
+/* 嘴巴 */
+
+.mouth{
+width:50px;
+height:30px;
+border-bottom:3px solid black;
+border-radius:50%;
+position:absolute;
+top:140px;
+left:50%;
+transform:translateX(-50%);
+}
+
+
+/* 舌頭 */
+
+.tongue{
+width:20px;
+height:20px;
+background:#ff6b6b;
+border-radius:50%;
+position:absolute;
+top:160px;
+left:50%;
+transform:translateX(-50%);
+}
+
+
+
+/* 結果 */
+
+.result{
+margin-top:10px;
+background:#f0f0f0;
+padding:10px;
+border-radius:10px;
+font-size:14px;
+}
+
+
+button{
+margin-top:10px;
+padding:8px 15px;
+border:none;
+background:#ff9f43;
+color:white;
+border-radius:8px;
+cursor:pointer;
+}
+
+button:hover{
+background:#ff7f11;
+}
+
+
+.note{
+color:gray;
+font-size:12px;
+margin-top:10px;
+text-align:left;
+line-height:1.4;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+
+<!-- 思考框 -->
+
+<div class="thought">
+
+<h3>妙麗歲數計算機</h3>
+
+狗狗出生日期
+
+<br>
+
+<input type="date" id="birth">
+
+<br>
+
+<button onclick="calculate()">開始計算</button>
+
+<div class="result" id="result">
+等待計算...
+</div>
+
+
+<div class="note">
+
+參考資料：<br>
+
+American Veterinary Medical Association  
+https://www.avma.org
+
+</div>
+
+</div>
+
+
+<!-- 思考泡泡 -->
+
+<div class="bubble1"></div>
+<div class="bubble2"></div>
+<div class="bubble3"></div>
+
+
+
+<!-- 狗狗 -->
+
+<div class="dog">
+
+<div class="ear left-ear"></div>
+<div class="ear right-ear"></div>
+
+<div class="forehead"></div>
+<div class="face-white"></div>
+
+<div class="eye left-eye"></div>
+<div class="eye right-eye"></div>
+
+<div class="nose"></div>
+<div class="mouth"></div>
+<div class="tongue"></div>
+
+</div>
+
+
+</div>
+
+
+
+<script>
+
+/* 讀取儲存生日 */
+
+window.onload=function(){
+
+let savedBirthday=localStorage.getItem("dogBirthday")
+
+if(savedBirthday){
+document.getElementById("birth").value=savedBirthday
+}else{
+document.getElementById("birth").value="2023-02-28"
+}
+
+}
+
+
+
+function calculate(){
+
+let birth=document.getElementById("birth").value
+
+if(!birth){
+alert("請選擇出生日期")
+return
+}
+
+localStorage.setItem("dogBirthday",birth)
+
+let birthDate=new Date(birth)
+let today=new Date()
+
+let diff=today-birthDate
+
+let dogAge=diff/(1000*60*60*24*365)
+
+dogAge=Math.floor(dogAge)
+
+let humanAge=0
+
+if(dogAge<=0){
+humanAge=0
+}
+else if(dogAge==1){
+humanAge=15
+}
+else if(dogAge==2){
+humanAge=24
+}
+else{
+humanAge=24+(dogAge-2)*5
+}
+
+document.getElementById("result").innerHTML=
+"妙麗現在大約 "+dogAge+" 歲狗年齡<br>換算成人類年齡大約是 "+humanAge+" 歲"
+
+}
+
+</script>
+
+
+</body>
+</html>
